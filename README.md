@@ -24,7 +24,9 @@
   
 #### SpaceAPI
 - **_base** - обработчик http запросов. 
-
+- **_client** - клиент реализующий endpoint NASA API.
+- **schemas** - схема запросов-ответов API.
+ 
 #### `__main__`
 
 Запуск бота осуществляется через: `$python3 .src/__main__.py`
