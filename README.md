@@ -6,7 +6,7 @@
 
 #### Settings 
 
-Все настройки находятся в файле .src/settings.py
+Все настройки находятся в файле `src/settings.py`
 
 #### Bot
 - **db** -
