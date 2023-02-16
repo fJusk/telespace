@@ -29,7 +29,7 @@ class PhotoLoader:
         text = data.explanation.split('.')
         expl = ''
         for sentence in text:
-            if len(sentence + expl) < 1000:
+            if len(sentence + expl) < 500:
                 expl += sentence
             else: 
                 break

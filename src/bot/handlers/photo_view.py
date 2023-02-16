@@ -1,5 +1,6 @@
 from telegram import Update, InlineKeyboardButton
 from telegram.ext import ContextTypes
+from telegram.error import BadRequest
 
 from datetime import datetime
 
@@ -49,9 +50,6 @@ class FavoritesPaginationHandler:
         if len(query) == 0:
             await update.callback_query.answer('У вас нет фото в избранных!')
             return
-        if len(query) == 1:
-            await update.callback_query.answer('У вас только одно фото в избранных!')
-            return
 
         picture_date = datetime.fromisoformat(query[index])
         apod = await photo_service.client_api.apod(date=picture_date)
@@ -68,11 +66,13 @@ class FavoritesPaginationHandler:
                 InlineKeyboardButton('🏠', callback_data='home'),
             ]
         )
-
-        await update.callback_query.edit_message_media(
-            media=media,
-            reply_markup=pagination.keyboard
-        )
+        try:
+            await update.callback_query.edit_message_media(
+                media=media,
+                reply_markup=pagination.keyboard
+            )
+        except BadRequest:
+            await update.callback_query.answer('У вас одно фото в избранных!')
 
 
 class ManageFavoritesHandler:
@@ -88,7 +88,9 @@ class ManageFavoritesHandler:
             case 'like':
                 try:
                     date = datetime.fromisoformat(img_data)
-                    db.add_favorite(user_id, date)
+                    result = db.add_favorite(user_id, date)
+                    if not result:
+                        await update.callback_query.answer('Фото уже в избранном!')
                 except ValueError:
                     await update.callback_query.answer('Что-то пошло не так! Попробуйте еще раз.')
                 else:

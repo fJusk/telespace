@@ -35,9 +35,14 @@ class MongoClient:
 
     def add_favorite(self, user_id: int, date: datetime) -> None:
         db = self.client[self.db_name][User._collection]
+        user = self.get_user(user_id)
+        favorites = user.favorites
+        if date.strftime('%Y-%m-%d') in favorites:
+            return False
         user_data = {'_id': user_id}
         update_data = {'$push': {'favorites': date.strftime('%Y-%m-%d')}}
         db.update_one(user_data, update_data)
+        return True
 
     def pop_favorite(self, user_id: int, index: int) -> None:
         db = self.client[self.db_name][User._collection]
