@@ -1,3 +1,5 @@
 aiohttp>=3.8
 attrs>=22.2
 pydantic>=1.10
+aioredis>=2.0
+pymongo>=4.3
