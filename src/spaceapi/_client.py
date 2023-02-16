@@ -25,7 +25,6 @@ class APIClient(BaseClient):
         endpoint = '/planetary/apod'
         kwargs['api_key'] = self._api_key
         request = APODRequest(**kwargs)
-        print(request.date)
         response = await self.get(endpoint, json_resp=True, params=request.dict())
         if isinstance(response, list):
             return [APODResponse(**resp) for resp in response]
